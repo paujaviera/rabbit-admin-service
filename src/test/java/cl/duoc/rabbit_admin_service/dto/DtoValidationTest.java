@@ -1,7 +1,7 @@
 package cl.duoc.rabbit_admin_service.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import jakarta.validation.Validation;
@@ -19,6 +19,16 @@ class DtoValidationTest {
     @Test
     void colaConNombreEsValida() {
         assertTrue(v.validate(new QueueRequest("c", true, null, null)).isEmpty());
+    }
+
+    @Test
+    void colaConDlqIncompletaEsInvalida() {
+        assertFalse(v.validate(new QueueRequest("c", true, "dlx", null)).isEmpty());
+    }
+
+    @Test
+    void colaConDlqCompletaEsValida() {
+        assertTrue(v.validate(new QueueRequest("c", true, "dlx", "dlq.key")).isEmpty());
     }
 
     @Test

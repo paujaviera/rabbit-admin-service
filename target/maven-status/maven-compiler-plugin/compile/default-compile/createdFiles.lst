@@ -1,7 +1,0 @@
-cl\duoc\rabbit_admin_service\RabbitAdminApplication.class
-cl\duoc\rabbit_admin_service\controller\RabbitAdminController.class
-cl\duoc\rabbit_admin_service\config\SecurityConfig.class
-cl\duoc\rabbit_admin_service\dto\ExchangeRequest.class
-cl\duoc\rabbit_admin_service\service\RabbitAdminService.class
-cl\duoc\rabbit_admin_service\dto\BindingRequest.class
-cl\duoc\rabbit_admin_service\dto\QueueRequest.class

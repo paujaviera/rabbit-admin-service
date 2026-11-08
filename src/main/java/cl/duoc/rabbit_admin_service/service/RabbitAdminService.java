@@ -1,8 +1,13 @@
 package cl.duoc.rabbit_admin_service.service;
 
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.HeadersExchange;
+import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.rabbit_admin_service.dto.BindingRequest;
@@ -12,10 +17,10 @@ import cl.duoc.rabbit_admin_service.dto.QueueRequest;
 @Service
 public class RabbitAdminService {
 
-    private final RabbitAdmin admin;
+    private final AmqpAdmin admin;
 
-    public RabbitAdminService(ConnectionFactory connectionFactory) {
-        this.admin = new RabbitAdmin(connectionFactory);
+    public RabbitAdminService(AmqpAdmin admin) {
+        this.admin = admin;
     }
 
     public void crearCola(QueueRequest r) {
@@ -48,12 +53,15 @@ public class RabbitAdminService {
     }
 
     public void crearBinding(BindingRequest r) {
-        String key = r.routingKey() == null ? "" : r.routingKey();
-        admin.declareBinding(new Binding(r.queue(), Binding.DestinationType.QUEUE, r.exchange(), key, null));
+        admin.declareBinding(toBinding(r));
     }
 
     public void eliminarBinding(BindingRequest r) {
+        admin.removeBinding(toBinding(r));
+    }
+
+    private Binding toBinding(BindingRequest r) {
         String key = r.routingKey() == null ? "" : r.routingKey();
-        admin.removeBinding(new Binding(r.queue(), Binding.DestinationType.QUEUE, r.exchange(), key, null));
+        return new Binding(r.queue(), Binding.DestinationType.QUEUE, r.exchange(), key, null);
     }
 }
